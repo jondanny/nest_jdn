@@ -5,6 +5,7 @@ import { User } from './user.entity';
 import { CreateClientDto } from './dto/create-user.dto';
 import { S3Service } from 'src/s3/s3.service';
 import { ClientService } from 'src/client/client.service';
+import { PhotoService } from 'src/photo/photo.service';
 
 @Injectable()
 export class UserService {
@@ -12,6 +13,7 @@ export class UserService {
     private readonly userRepository: UserRepository,
     private readonly s3Service: S3Service,
     private readonly clientService: ClientService,
+    private readonly photoService: PhotoService,
   ) {}
 
   async findOne(param: any): Promise<User> {
@@ -22,7 +24,7 @@ export class UserService {
     return this.userRepository.findOneBy({ email });
   }
 
-  async create(body: CreateClientDto, files: Express.Multer.File[]): Promise<void> {
+  async create(body: CreateClientDto, files: Express.Multer.File[]): Promise<any> {
     const queryRunner = this.userRepository.dataSource.createQueryRunner();
 
     try {
@@ -44,13 +46,22 @@ export class UserService {
       // Upload images to S3
       const urls = await this.s3Service.uploadFiles(files);
 
-      await this.clientService.create({
+      // Save photos
+      const photos = await this.photoService.create(user.id, urls);
+
+      // Create a client
+      const client = await this.clientService.create({
         userId: user.id,
         avatar: urls[0],
-        photos: urls,
       });
 
       await queryRunner.commitTransaction();
+
+      return {
+        ...user,
+        avatar: client.avatar,
+        photos: photos.map(({ url }) => url),
+      };
     } catch (error) {
       // Rollback user record creation in case image upload fails
       await queryRunner.rollbackTransaction();

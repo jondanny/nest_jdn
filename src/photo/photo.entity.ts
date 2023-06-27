@@ -1,18 +1,17 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '../user/user.entity';
 
-@Entity('client')
-export class Client {
+@Entity('photo')
+export class Photo {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
   @Column({ type: 'varchar', nullable: false })
-  avatar: string;
+  url: string;
 
   @Column({ type: 'int', nullable: false })
   userId: number;
 
-  @OneToOne(() => User)
-  @JoinColumn()
+  @ManyToOne(() => User, (user) => user.photos)
   user: User;
 }

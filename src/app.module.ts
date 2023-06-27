@@ -14,6 +14,7 @@ import databaseConfig from './config/database.config';
 import jwtConfig from './config/jwt.config';
 import s3Config from './config/s3.config';
 import { validate } from './common/validators/env.validator';
+import { PhotoModule } from './photo/photo.module';
 
 EnvHelper.verifyNodeEnv();
 
@@ -39,10 +40,10 @@ EnvHelper.verifyNodeEnv();
       inject: [ConfigService],
     }),
     AuthModule,
-    AuthModule,
     UserModule,
     ClientModule,
     S3Module,
+    PhotoModule,
   ],
   controllers: [AppController],
   providers: [AppService, ClientService],

@@ -9,7 +9,7 @@ export class UserController {
 
   @Post('register')
   @UseInterceptors(FilesInterceptor('files'))
-  async registerClient(@Body() body: CreateClientDto, @UploadedFiles() files: Express.Multer.File[]): Promise<void> {
-    await this.userService.create(body, files);
+  async registerClient(@Body() body: CreateClientDto, @UploadedFiles() files: Express.Multer.File[]): Promise<any> {
+    return this.userService.create(body, files);
   }
 }
