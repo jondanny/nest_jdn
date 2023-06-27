@@ -1,5 +1,5 @@
 import { Photo } from 'src/photo/photo.entity';
-import { Entity, Column, CreateDateColumn, OneToMany, PrimaryGeneratedColumn, DeleteDateColumn } from 'typeorm';
+import { Entity, Column, CreateDateColumn, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('user')
 export class User {
@@ -30,7 +30,7 @@ export class User {
   @CreateDateColumn()
   createdAt: Date;
 
-  @DeleteDateColumn()
+  @UpdateDateColumn()
   updatedAt: Date;
 
   @OneToMany(() => Photo, (photo) => photo.user)
