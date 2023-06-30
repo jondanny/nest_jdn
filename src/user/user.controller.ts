@@ -12,8 +12,8 @@ export class UserController {
   @Post('register')
   @UseInterceptors(FilesInterceptor('files'))
   async registerClient(@Body() body: CreateClientDto, @UploadedFiles() files: Express.Multer.File[]): Promise<any> {
-    if (!files) {
-      throw new BadRequestException('Cannot find files attached');
+    if (!files || files.length < 4) {
+      throw new BadRequestException('Must upload at least 4 images');
     }
 
     return this.userService.create(body, files);
