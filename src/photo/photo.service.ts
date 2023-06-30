@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { QueryRunner } from 'typeorm';
 import { PhotoRepository } from './photo.repository';
 import { Photo } from './photo.entity';
 
@@ -6,9 +7,7 @@ import { Photo } from './photo.entity';
 export class PhotoService {
   constructor(private readonly photoRepository: PhotoRepository) {}
 
-  async create(userId: number, urls: string[]): Promise<Photo[]> {
-    const photoEntities = this.photoRepository.create(urls.map((url) => ({ userId, url })));
-
-    return this.photoRepository.save(photoEntities);
+  async create(queryRunner: QueryRunner, userId: number, urls: string[]): Promise<Photo[]> {
+    return queryRunner.manager.save(this.photoRepository.create(urls.map((url) => ({ userId, url }))));
   }
 }

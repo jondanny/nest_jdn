@@ -25,13 +25,14 @@ export class UserService {
   }
 
   async create(body: CreateClientDto, files: Express.Multer.File[]): Promise<any> {
+    console.log('files:', files);
     const queryRunner = this.userRepository.dataSource.createQueryRunner();
 
     try {
       await queryRunner.connect();
       await queryRunner.startTransaction();
 
-      const user = await this.userRepository.save(
+      const user = await queryRunner.manager.save(
         this.userRepository.create({
           firstName: body.firstName,
           lastName: body.lastName,
@@ -47,10 +48,10 @@ export class UserService {
       const urls = await this.s3Service.uploadFiles(files);
 
       // Save photos
-      const photos = await this.photoService.create(user.id, urls);
+      const photos = await this.photoService.create(queryRunner, user.id, urls);
 
       // Create a client
-      const client = await this.clientService.create({
+      const client = await this.clientService.create(queryRunner, {
         userId: user.id,
         avatar: urls[0],
       });

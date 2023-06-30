@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { QueryRunner } from 'typeorm';
 import { ClientRepository } from './client.repository';
 import { Client } from './client.entity';
 
@@ -10,9 +11,7 @@ export class ClientService {
     return this.clientRepository.findOne({ where: param });
   }
 
-  async create(body: Partial<Client>): Promise<Client> {
-    const client = await this.clientRepository.save(this.clientRepository.create(body));
-
-    return client;
+  async create(queryRunner: QueryRunner, body: Partial<Client>): Promise<Client> {
+    return queryRunner.manager.save(this.clientRepository.create(body));
   }
 }

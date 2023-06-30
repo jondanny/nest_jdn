@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ClientService } from './client/client.service';
@@ -45,7 +43,6 @@ EnvHelper.verifyNodeEnv();
     S3Module,
     PhotoModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, ClientService],
+  providers: [ClientService],
 })
 export class AppModule {}
