@@ -8,6 +8,7 @@ import { UserModule } from 'src/user/user.module';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { ClientModule } from 'src/client/client.module';
+import { PhotoModule } from 'src/photo/photo.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ClientModule } from 'src/client/client.module';
     }),
     UserModule,
     ClientModule,
+    PhotoModule,
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],

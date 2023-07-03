@@ -25,7 +25,6 @@ export class UserService {
   }
 
   async create(body: CreateClientDto, files: Express.Multer.File[]): Promise<any> {
-    console.log('files:', files);
     const queryRunner = this.userRepository.dataSource.createQueryRunner();
 
     try {
@@ -39,7 +38,7 @@ export class UserService {
           fullName: `${body.firstName} ${body.lastName}`,
           email: body.email,
           password: await bcrypt.hash(body.password, 10),
-          role: body.role,
+          role: 'client', // mock data
           active: true,
         }),
       );

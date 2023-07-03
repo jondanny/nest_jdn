@@ -4,10 +4,11 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LoginDto } from './dto/login.dto';
+import { PhotoService } from 'src/photo/photo.service';
 
 @Controller()
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService, private readonly photoService: PhotoService) {}
 
   @ApiOperation({ description: 'Login' })
   @UseGuards(LocalAuthGuard)
@@ -21,6 +22,8 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('users/me')
   async profile(@Req() req) {
-    return req.user;
+    const photos = await this.photoService.findByUserId(req.user.id);
+
+    return { ...req.user, photos };
   }
 }

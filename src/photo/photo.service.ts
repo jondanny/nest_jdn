@@ -7,6 +7,10 @@ import { Photo } from './photo.entity';
 export class PhotoService {
   constructor(private readonly photoRepository: PhotoRepository) {}
 
+  async findByUserId(userId: number): Promise<string[]> {
+    return (await this.photoRepository.find({ where: { userId } })).map(({ url }) => url);
+  }
+
   async create(queryRunner: QueryRunner, userId: number, urls: string[]): Promise<Photo[]> {
     return queryRunner.manager.save(this.photoRepository.create(urls.map((url) => ({ userId, url }))));
   }

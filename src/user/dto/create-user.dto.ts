@@ -27,8 +27,4 @@ export class CreateClientDto {
   @MaxLength(50)
   @Matches(/.*[0-9].*/, { message: 'Password must contain at least one number' })
   password: string;
-
-  @ApiProperty({ example: 'basic', required: true, description: 'Role' })
-  @IsString()
-  role: string;
 }
